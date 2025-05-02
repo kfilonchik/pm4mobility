@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pm4mobility"
+version = "0.1.0"
+description = "A Python package for process mining on mobility data"
+authors = [
+    { name="Khristina Filonchik", email="20230692@novaims.unl.pt" }
+]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "pandas",
+    "geopandas",
+    "shapely",
+    "networkx",
+    "matplotlib",
+    "seaborn",
+    "pm4py"
+]
+
+[project.urls]
+Homepage = "https://github.com/kfilonchik/pm4mobility"

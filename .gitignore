@@ -3,6 +3,14 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Ignore temporary and system files
+.DS_Store
+__pycache__/
+*.pyc
+*.ipynb_checkpoints/
+
+# Ignore data not meant to be shared
+/data
 # C extensions
 *.so
 
