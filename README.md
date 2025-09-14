@@ -16,7 +16,7 @@
 
 The project includes two experimental notebooks:
 
-- `01_traditional_pm.ipynb`: Applies traditional process mining using the Heuristic Miner and Petri net models.
+- `01_case_centric_pm.ipynb`: Applies traditional process mining using the directly-follows graphs (DFGs).
 - `02_ocel_pm.ipynb`: Applies object-centric process mining using directly-follows graphs (DFGs).
 
 The resulting models and visualizations are saved in the `figures/` directory.
