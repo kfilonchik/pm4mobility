@@ -26,24 +26,24 @@ def create_ocel_from_dataframe(
     }
 
     # 1. Object types: unique area names + mode names
-    #area_names = pd.Series(sorted(set(df[origin_area_col]) | set(df[dest_area_col]))).dropna().unique()
+    area_names = pd.Series(sorted(set(df[origin_area_col]) | set(df[dest_area_col]))).dropna().unique()
     mode_names = pd.Series(sorted(set(df[origin_mode_col]) | set(df[dest_mode_col]))).dropna().unique()
 
     ocel["objectTypes"] = (
-        #[{"name": area_name, "attributes": []} for area_name in area_names] +
+        [{"name": area_name, "attributes": []} for area_name in area_names] +
         [{"name": mode, "attributes": []} for mode in mode_names]
     )
 
     # 2. Object IDs
 
     # Area objects: area_1, area_2, ... typed by area name
-    #area_id_map = {area: f"area_{i+1}" for i, area in enumerate(area_names)}
-    #for area_name, area_id in area_id_map.items():
-       # ocel["objects"].append({
-          # "id": area_id,
-          #  "type": area_name,
-          #  "attributes": []
-       # })
+    area_id_map = {area: f"area_{i+1}" for i, area in enumerate(area_names)}
+    for area_name, area_id in area_id_map.items():
+       ocel["objects"].append({
+           "id": area_id,
+            "type": area_name,
+            "attributes": []
+        })
 
     # Mode objects: one per trip, ID = mode_tripid, type = mode
     trip_ids = set()
@@ -71,8 +71,8 @@ def create_ocel_from_dataframe(
         origin_trip_id = f"{row[origin_mode_col]}_{row[trip_id_col]}"
         dest_trip_id = f"{row[dest_mode_col]}_{row[trip_id_col]}"
         # Area object IDs
-        #origin_area_id = area_id_map.get(row[origin_area_col])
-        #dest_area_id = area_id_map.get(row[dest_area_col])
+        origin_area_id = area_id_map.get(row[origin_area_col])
+        dest_area_id = area_id_map.get(row[dest_area_col])
 
         # Origin event
         ocel["events"].append({
@@ -81,7 +81,7 @@ def create_ocel_from_dataframe(
             "time": pd.to_datetime(row[start_time_col]).isoformat(),
             "relationships": [
                 {"objectId": origin_trip_id, "qualifier": row[origin_mode_col]},
-                #{"objectId": origin_area_id, "qualifier": row[origin_area_col]}
+                {"objectId": origin_area_id, "qualifier": row[origin_area_col]}
             ]
         })
         event_counter += 1
@@ -93,7 +93,7 @@ def create_ocel_from_dataframe(
             "time": pd.to_datetime(row[end_time_col]).isoformat(),
             "relationships": [
                 {"objectId": dest_trip_id, "qualifier": row[dest_mode_col]},
-                #{"objectId": dest_area_id, "qualifier": row[dest_area_col]}
+                {"objectId": dest_area_id, "qualifier": row[dest_area_col]}
             ]
         })
         event_counter += 1

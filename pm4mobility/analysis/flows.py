@@ -94,9 +94,39 @@ def create_od_flows(
     od_flows["dest_length"] = destination_areas.get(length_col)
 
     # Final filtering
-    od_flows = od_flows[
-        (od_flows["origin_antenna"] != od_flows["dest_antenna"]) &
-        (od_flows["dest_mode"].notna())
-    ]
+    #od_flows = od_flows[
+        #(od_flows["origin_antenna"] != od_flows["dest_antenna"]) &
+        #(od_flows["dest_mode"].notna())
+    #]
 
     return od_flows
+
+
+def summarize_eventlog(log):
+    n_cases = len(log)
+    n_events = sum(len(trace) for trace in log)
+    activities = set()
+    for trace in log:
+        for ev in trace:
+            if 'concept:name' in ev:
+                activities.add(ev['concept:name'])
+
+    # events per case
+    ev_per_case = [len(t) for t in log]
+
+    # durations (needs time:timestamp)
+    import pandas as pd
+    durs = []
+    for t in log:
+        ts = [ev['time:timestamp'] for ev in t if 'time:timestamp' in ev]
+        if ts:
+            durs.append(max(ts) - min(ts))
+    duration_stats = pd.Series(durs).describe() if durs else "no timestamps"
+
+    print(f"cases: {n_cases}")
+    print(f"events: {n_events}")
+    print(f"activities: {len(activities)}")
+    print("events per case (count/mean/std/min/25%/50%/75%/max):")
+    print(pd.Series(ev_per_case).describe())
+    print("\ncase duration stats:")
+    print(duration_stats)

@@ -11,6 +11,7 @@ __pycache__/
 
 # Ignore data not meant to be shared
 /data
+/figures_old
 # C extensions
 *.so
 
